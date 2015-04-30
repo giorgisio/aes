@@ -30,42 +30,42 @@ func main() {
 	}
 	fmt.Printf("%s\n", plaintext)
 
-	encrypt_file_data("/usr/local/aes/plain.txt", "/usr/local/aes/plain.txt.aes")
-	decrypt_file_data("/usr/local/aes/plain.txt.aes", "/usr/local/aes/plain.txt")
+	encryptFile("sample/plain.txt", "sample/plain.txt.aes")
+	decryptFile("sample/plain.txt.aes", "sample/plain.txt")
 
 }
 
-func encrypt_file_data(src_file_path, des_file_path string) {
+func encryptFile(srcFilePath, desFilePath string) {
 
-	var ciphertext, plaintext []byte
+	var ciphertext []byte
 	var err error
 
 	// The key length can be 32, 24, 16  bytes (OR in bits: 128, 192 or 256)
 	key := []byte("longer means more possible keys ")
 
-	plaintext, _ = ioutil.ReadFile(src_file_path)
+	plaintext, _ := ioutil.ReadFile(srcFilePath)
 	if ciphertext, err = encrypt(key, plaintext); err != nil {
 		log.Fatal(err)
 	}
-	ioutil.WriteFile(des_file_path, ciphertext, 0755)
+	ioutil.WriteFile(desFilePath, ciphertext, 0755)
 
 	return
 
 }
 
-func decrypt_file_data(src_file_path, des_file_path string) {
+func decryptFile(srcFilePath, desFilePath string) {
 
-	var ciphertext, plaintext []byte
+	var plaintext []byte
 	var err error
 
 	// The key length can be 32, 24, 16  bytes (OR in bits: 128, 192 or 256)
 	key := []byte("longer means more possible keys ")
 
-	ciphertext, _ = ioutil.ReadFile(src_file_path)
+	ciphertext, _ := ioutil.ReadFile(srcFilePath)
 	if plaintext, err = decrypt(key, ciphertext); err != nil {
 		log.Fatal(err)
 	}
-	ioutil.WriteFile(des_file_path, plaintext, 0755)
+	ioutil.WriteFile(desFilePath, plaintext, 0755)
 
 	return
 }
@@ -109,9 +109,7 @@ func decrypt(key, ciphertext []byte) (plaintext []byte, err error) {
 	ciphertext = ciphertext[aes.BlockSize:]
 
 	cfb := cipher.NewCFBDecrypter(block, iv)
-	cfb.XORKeyStream(ciphertext, ciphertext)
-
-	plaintext = ciphertext
+	cfb.XORKeyStream(plaintext, ciphertext)
 
 	return
 }

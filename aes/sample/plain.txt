@@ -1,0 +1,12 @@
+First, let's talk about C syntax. C took an unusual and clever approach to declaration syntax. Instead of describing the types with special syntax, one writes an expression involving the item being declared, and states what type that expression will have. Thus
+
+int x;
+declares x to be an int: the expression 'x' will have type int. In general, to figure out how to write the type of a new variable, write an expression involving that variable that evaluates to a basic type, then put the basic type on the left and the expression on the right.
+
+Thus, the declarations
+
+int *p;
+int a[3];
+state that p is a pointer to int because '*p' has type int, and that a is an array of ints because a[3] (ignoring the particular index value, which is punned to be the size of the array) has type int.
+
+What about functions? Originally, C's function declarations wrote the types of the arguments outside the parens, like this:
